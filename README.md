@@ -5,6 +5,8 @@ Github : https://github.com/irerin07/wanted-pre-onboarding-backend
 
 개발일지 : [https://irerin07.tistory.com](https://irerin07.tistory.com/)
 
+Notion : https://www.notion.so/Recruitment-Api-Service-2b5e0014f96c46e583b053c5369bc601?pvs=4
+
 기술 스택 : Java 11, Spring Boot 2.x, Spring Data JPA, Querydsl, MySQL, Gradle
 
 # 요구 사항 분석
