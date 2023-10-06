@@ -17,6 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,19 +40,23 @@ public class Company extends AbstractEntity{
   private static final long serialVersionUID = 7593219524018854620L;
 
 
-  @ColumnDefault("")
   @Column(name = "company_name", nullable = false, length = 50)
   private String companyName;
 
-  @ColumnDefault("")
   @Column(name = "country", nullable = false, length = 50)
   private String country;
 
-  @ColumnDefault("")
   @Column(name = "region", nullable = false, length = 50)
   private String region;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "company", cascade = CascadeType.PERSIST)
   private Set<RecruitmentNotice> recruitmentNotices = new LinkedHashSet<>();
+
+  @Builder
+  public Company(String companyName, String country, String region) {
+    this.companyName = companyName;
+    this.country = country;
+    this.region = region;
+  }
 
 }

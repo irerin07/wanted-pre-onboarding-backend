@@ -33,7 +33,6 @@ public class User extends AbstractEntity{
   private static final long serialVersionUID = 879927150739089460L;
 
 
-  @ColumnDefault("")
   @Column(name = "name", nullable = false, length = 50)
   private String name;
 

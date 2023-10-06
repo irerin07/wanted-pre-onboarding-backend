@@ -41,6 +41,13 @@ dependencies {
 
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
+  // https://mvnrepository.com/artifact/javax.validation/validation-api
+  implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.7.16'
+
+
   annotationProcessor(
           "com.querydsl:querydsl-apt:5.0.0:jpa",
           "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",

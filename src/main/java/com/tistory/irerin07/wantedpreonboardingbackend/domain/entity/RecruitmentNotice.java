@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,24 +38,20 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "tb_recruitment_notice")
-public class RecruitmentNotice extends AbstractEntity{
+public class RecruitmentNotice extends AbstractEntity {
 
   private static final long serialVersionUID = 8212134289170406803L;
 
 
-  @ColumnDefault("")
   @Column(name = "job_position", nullable = false, length = 50)
   private String jobPosition;
 
-  @ColumnDefault("")
   @Column(name = "required_skill", nullable = false, length = 50)
   private String requiredSkill;
 
-  @ColumnDefault("0")
   @Column(name = "recruit_reward", nullable = false)
   private Integer recruitReward;
 
-  @ColumnDefault("")
   @Column(name = "recruit_description", nullable = false)
   private String recruitDescription;
 
@@ -71,11 +67,20 @@ public class RecruitmentNotice extends AbstractEntity{
   protected LocalDateTime updateAt;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-  @Column(name = "delete_at", nullable = false, updatable = false)
+  @Column(name = "delete_at")
   private LocalDateTime deleteAt;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "company_seq", nullable = false)
   private Company company;
+
+  @Builder
+  public RecruitmentNotice(String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, Company company) {
+    this.jobPosition = jobPosition;
+    this.requiredSkill = requiredSkill;
+    this.recruitReward = recruitReward;
+    this.recruitDescription = recruitDescription;
+    this.company = company;
+  }
 
 }
