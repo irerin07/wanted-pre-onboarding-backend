@@ -1,5 +1,9 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.domain.dto;
 
+import javax.persistence.Column;
+
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,23 +12,28 @@ import lombok.Setter;
 
 /**
  * @author 민경수
- * @description user dto
+ * @description company dto
  * @since 2023.10.06
  **********************************************************************************************************************/
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDto extends AbstractDto{
+public class CompanyDto extends AbstractDto{
+  private static final long serialVersionUID = 1342872351731263292L;
 
-  private static final long serialVersionUID = -5900446930989885993L;
 
+  private String companyName;
 
-  private String name;
+  private String country;
 
-  public UserDto(Long seq, String name) {
+  private String region;
+
+  public CompanyDto(Long seq, String companyName, String country, String region) {
     super(seq);
-    this.name = name;
+    this.companyName = companyName;
+    this.country = country;
+    this.region = region;
   }
 
 }

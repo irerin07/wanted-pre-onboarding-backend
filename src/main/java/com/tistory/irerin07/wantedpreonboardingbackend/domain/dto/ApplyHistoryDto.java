@@ -8,23 +8,20 @@ import lombok.Setter;
 
 /**
  * @author 민경수
- * @description user dto
+ * @description apply history dto
  * @since 2023.10.06
  **********************************************************************************************************************/
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDto extends AbstractDto{
+public class ApplyHistoryDto extends AbstractDto{
 
-  private static final long serialVersionUID = -5900446930989885993L;
+  private static final long serialVersionUID = -8910204286609168398L;
 
 
-  private String name;
-
-  public UserDto(Long seq, String name) {
+  public ApplyHistoryDto(Long seq) {
     super(seq);
-    this.name = name;
   }
 
 }
