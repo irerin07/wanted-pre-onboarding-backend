@@ -1,7 +1,6 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.RecruitmentNoticeResponse;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoticeVo;
@@ -14,7 +13,7 @@ public interface RecruitmentNoticeService {
 
   void remove(Long seq, Long companySeq);
 
-  Page<RecruitmentNoticeResponse> get(Pageable pageable);
+  List<RecruitmentNoticeResponse> get();
 
   RecruitmentNoticeResponse get(Long seq);
 

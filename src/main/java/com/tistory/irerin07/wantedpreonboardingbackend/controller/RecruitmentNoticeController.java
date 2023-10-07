@@ -1,11 +1,8 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.controller;
 
-import static com.tistory.irerin07.wantedpreonboardingbackend.common.constant.PageConstant.PAGE_BLOCK;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,13 +47,15 @@ public class RecruitmentNoticeController {
 
   // TODO 응답 데이터에서 채용 내용 빼야함
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ResourcesWrapper> read(@PageableDefault Pageable pageable) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(pageable), PAGE_BLOCK).build());
+  public ResponseEntity<ResourcesWrapper> read() {
+    List<RecruitmentNoticeVo.Response> responses = service.get().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
+
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(responses).build());
   }
 
   @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(RecruitmentNoticeVo.Response.toVo(service.get(seq))).build());
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(RecruitmentNoticeVo.DetailResponse.toVo(service.get(seq))).build());
   }
 
   @PutMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +64,7 @@ public class RecruitmentNoticeController {
 
     return ResponseEntity.noContent().build();
   }
-  
+
   @DeleteMapping(path = "/{seq}/companies/{companySeq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> delete(@PathVariable("seq") Long seq, @PathVariable("companySeq") Long companySeq) {
     service.remove(seq, companySeq);
