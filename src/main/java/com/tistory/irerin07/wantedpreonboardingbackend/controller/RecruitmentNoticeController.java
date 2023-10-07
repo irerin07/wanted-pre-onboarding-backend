@@ -49,7 +49,7 @@ public class RecruitmentNoticeController {
   // 채용 공고 조회
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read() {
-    List<RecruitmentNoticeVo.Response> responses = service.get().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
+    List<RecruitmentNoticeVo.Response> responses = service.getAll().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
 
     return ResponseEntity.ok(new ResourcesWrapper.Builder(responses).build());
   }
@@ -57,7 +57,7 @@ public class RecruitmentNoticeController {
   // 채용 상세 페이지 조회
   @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(seq)).build());
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.getResponse(seq)).build());
   }
 
   // 채용 공고 수정

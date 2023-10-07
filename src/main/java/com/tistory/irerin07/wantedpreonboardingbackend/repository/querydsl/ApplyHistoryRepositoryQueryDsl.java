@@ -4,4 +4,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface ApplyHistoryRepositoryQueryDsl {
+
+  boolean existsByUserSeqAndRecruitmentNoticeSeq(Long userSeq, Long recruitmentNoticeSeq);
+
 }

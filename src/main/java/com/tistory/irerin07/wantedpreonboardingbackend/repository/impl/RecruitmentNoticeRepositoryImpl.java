@@ -76,6 +76,11 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
   }
 
+  @Override
+  public boolean existsBySeq(Long seq) {
+    return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull()).select(recruitmentNotice.seq).fetchFirst() != null;
+  }
+
   private JPQLQuery<RecruitmentNotice> findOne(Predicate... where) {
     //@formatter:off
     return from(recruitmentNotice)

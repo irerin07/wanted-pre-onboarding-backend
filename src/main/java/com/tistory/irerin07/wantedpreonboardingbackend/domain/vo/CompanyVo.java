@@ -1,9 +1,12 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.domain.vo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.CompanyResponse;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +17,11 @@ import lombok.Setter;
  * @description company vo
  * @since 2023.10.07
  **********************************************************************************************************************/
-public class CompanyVo {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CompanyVo implements Serializable {
+
+  private static final long serialVersionUID = -6351419853735974607L;
+
 
   @Getter
   @Setter

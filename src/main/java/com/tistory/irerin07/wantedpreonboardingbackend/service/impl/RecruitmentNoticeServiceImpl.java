@@ -37,13 +37,19 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<RecruitmentNoticeResponse> get() {
+  public RecruitmentNotice get(Long seq) {
+    return repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public List<RecruitmentNoticeResponse> getAll() {
     return repository.findAllAvailable();
   }
 
   @Transactional(readOnly = true)
   @Override
-  public RecruitmentNoticeVo.DetailResponse get(Long seq) {
+  public RecruitmentNoticeVo.DetailResponse getResponse(Long seq) {
     RecruitmentNoticeResponse recruitmentNoticeResponse = repository.findResponseBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
 
     //@formatter:off
@@ -70,6 +76,11 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
   @Override
   public void remove(Long seq, Long companySeq) {
     repository.findBySeqAndCompanySeq(seq, companySeq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+  }
+
+  @Override
+  public boolean existByRecruitmentNoticeSeq(Long seq) {
+    return repository.existsBySeq(seq);
   }
 
 }
