@@ -15,4 +15,6 @@ public interface RecruitmentNoticeService {
 
   Page<RecruitmentNoticeResponse> get(Pageable pageable);
 
+  RecruitmentNoticeResponse get(Long seq);
+
 }

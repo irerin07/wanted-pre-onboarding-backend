@@ -43,6 +43,15 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   }
 
   @Override
+  public Optional<RecruitmentNoticeResponse> findResponseBySeq(Long seq) {
+    JPQLQuery<RecruitmentNotice> query = this.findOne(seq);
+
+    List<RecruitmentNoticeResponse> responses = query.transform(groupBy(recruitmentNotice).list(getExpression()));
+
+    return responses.isEmpty() ? Optional.empty() : Optional.of(responses.get(0));
+  }
+
+  @Override
   public Page<RecruitmentNoticeResponse> findAllAvailable(Pageable pageable) {
     JPQLQuery<Long> query = findAll()
       .select(recruitmentNotice.seq);

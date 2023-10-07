@@ -1,5 +1,7 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -37,6 +39,12 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
   @Override
   public Page<RecruitmentNoticeResponse> get(Pageable pageable) {
     return repository.findAllAvailable(pageable);
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public RecruitmentNoticeResponse get(Long seq) {
+    return repository.findResponseBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
   }
 
   @Transactional

@@ -48,9 +48,15 @@ public class RecruitmentNoticeController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
+  // TODO 응답 데이터에서 채용 내용 빼야함
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PageableDefault Pageable pageable) {
     return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(pageable), PAGE_BLOCK).build());
+  }
+
+  @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(RecruitmentNoticeVo.Response.toVo(service.get(seq))).build());
   }
 
   @PutMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

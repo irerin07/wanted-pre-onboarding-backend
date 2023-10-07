@@ -10,12 +10,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.Company;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
+import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.CompanyResponse;
+import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.RecruitmentNoticeResponse;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -35,15 +36,6 @@ public class RecruitmentNoticeVo implements Serializable {
   @SuppressWarnings("java:S5843")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public static class Create {
-    /**
-     * {
-     *   "회사_id":회사_id,
-     *   "채용포지션":"백엔드 주니어 개발자",
-     *   "채용보상금":1000000,
-     *   "채용내용":"원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
-     *   "사용기술":"Python"
-     * }
-     */
 
     @NotNull(message = "회사 id를 입력해 주세요")
     private Long companySeq;
@@ -74,6 +66,7 @@ public class RecruitmentNoticeVo implements Serializable {
     }
   }
 
+
   @Getter
   @Setter
   @NoArgsConstructor
@@ -99,5 +92,47 @@ public class RecruitmentNoticeVo implements Serializable {
 
     private Long seq;
   }
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT, content = JsonInclude.Include.NON_EMPTY)
+  public static class Response {
+    private Long seq;
+    private String jobPosition;
+    private String requiredSkill;
+    private Integer recruitReward;
+    private String recruitDescription;
+
+    private CompanyVo.Response company;
+
+    @Builder
+    public Response(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company) {
+      this.seq = seq;
+      this.jobPosition = jobPosition;
+      this.requiredSkill = requiredSkill;
+      this.recruitReward = recruitReward;
+      this.recruitDescription = recruitDescription;
+      this.company = company;
+    }
+
+    public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse){
+      return Response.builder()
+        .seq(recruitmentNoticeResponse.getSeq())
+        .jobPosition(recruitmentNoticeResponse.getJobPosition())
+        .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward())
+        .recruitDescription(recruitmentNoticeResponse.getRecruitDescription())
+        .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+        .build();
+    }
+
+    static CompanyVo.Response buildCompany(CompanyResponse dto) {
+      return null == dto ? null : CompanyVo.Response.toVo(dto);
+    }
+
+  }
+
 
 }
