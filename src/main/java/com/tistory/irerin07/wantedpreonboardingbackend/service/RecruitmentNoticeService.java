@@ -7,11 +7,12 @@ import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.Recruitme
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoticeVo;
 
 public interface RecruitmentNoticeService {
+
   void set(RecruitmentNoticeVo.Create create);
 
   void modify(RecruitmentNoticeVo.Update update, Long seq);
 
-  void remove(Long seq);
+  void remove(Long seq, Long companySeq);
 
   Page<RecruitmentNoticeResponse> get(Pageable pageable);
 

@@ -60,9 +60,9 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
   // TODO 회사 id도 함께 받도록 수정
   @Transactional
   @Override
-  public void remove(Long seq) {
+  public void remove(Long seq, Long companySeq) {
     // TODO 채용공고 조회시 조건에 회사 id도 함께 걸어서 조회 하도록 수정
-    repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+    repository.findBySeqAndCompanySeq(seq, companySeq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
   }
 
 }

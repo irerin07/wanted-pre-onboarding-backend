@@ -37,14 +37,14 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
 
   @Override
   public Optional<RecruitmentNotice> findBySeq(Long seq) {
-    JPQLQuery<RecruitmentNotice> query = findOne(seq);
+    JPQLQuery<RecruitmentNotice> query = findOne(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull());
 
     return Optional.ofNullable(query.fetchOne());
   }
 
   @Override
   public Optional<RecruitmentNoticeResponse> findResponseBySeq(Long seq) {
-    JPQLQuery<RecruitmentNotice> query = this.findOne(seq);
+    JPQLQuery<RecruitmentNotice> query = this.findOne(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull());
 
     List<RecruitmentNoticeResponse> responses = query.transform(groupBy(recruitmentNotice).list(getExpression()));
 
@@ -53,13 +53,14 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
 
   @Override
   public Page<RecruitmentNoticeResponse> findAllAvailable(Pageable pageable) {
-    JPQLQuery<Long> query = findAll()
+    JPQLQuery<Long> query = findAll(recruitmentNotice.deleteAt.isNull())
       .select(recruitmentNotice.seq);
 
     Page<Long> page = buildIdsPage(pageable, query);
 
     return new PageImpl<>(
       findAll(recruitmentNotice.seq.in(page.getContent()))
+        .innerJoin(recruitmentNotice.company, company)
         .orderBy(recruitmentNotice.seq.desc())
         .transform(groupBy(recruitmentNotice).list(getExpression())),
       page.getPageable(),
@@ -67,32 +68,28 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     );
   }
 
-  private JPQLQuery<RecruitmentNotice> findOne(Long seq) {
+  @Override
+  public Optional<RecruitmentNotice> findBySeqAndCompanySeq(Long seq, Long companySeq) {
     //@formatter:off
-    return from(recruitmentNotice)
-      .where(
-        recruitmentNotice.seq.eq(seq),
-        recruitmentNotice.deleteAt.isNull()
-      );
-    //@formatter:on
-  }
-
-  private JPQLQuery<RecruitmentNotice> findAll() {
-    //@formatter:off
-    return from(recruitmentNotice)
-      .where(
-        recruitmentNotice.deleteAt.isNull()
-      );
-    //@formatter:on
-  }
-
-  private JPQLQuery<RecruitmentNotice> findAll(Predicate... where) {
-    // @formatter:off
-    JPQLQuery<RecruitmentNotice> query = from(recruitmentNotice)
+    JPQLQuery<RecruitmentNotice> query = findOne(recruitmentNotice.seq.eq(seq),recruitmentNotice.deleteAt.isNull(), company.seq.eq(companySeq))
       .innerJoin(recruitmentNotice.company, company);
-    // @formatter:on
+    //@formatter:on
 
-    return query.where(where);
+    return Optional.ofNullable(query.fetchOne());
+  }
+
+  private JPQLQuery<RecruitmentNotice> findOne(Predicate ...where) {
+    //@formatter:off
+    return from(recruitmentNotice)
+      .where(where);
+    //@formatter:on
+  }
+
+  private JPQLQuery<RecruitmentNotice> findAll(Predicate ...where) {
+    //@formatter:off
+    return from(recruitmentNotice)
+      .where(where);
+    //@formatter:on
   }
 
   private Page<Long> buildIdsPage(Pageable pageable, JPQLQuery<Long> idsQuery) {
@@ -100,9 +97,7 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   }
 
   public FactoryExpression<RecruitmentNoticeResponse> getExpression() {
-    //@formatter:off
     return new QRecruitmentNoticeResponse(recruitmentNotice, new QCompanyResponse(company).skipNulls()).skipNulls();
-    //@formatter:on
   }
 
 }

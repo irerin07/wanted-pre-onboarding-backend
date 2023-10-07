@@ -65,11 +65,10 @@ public class RecruitmentNoticeController {
 
     return ResponseEntity.noContent().build();
   }
-
-  // TODO 삭제 요청시 회사 id도 함께 전달받도록 수정
-  @DeleteMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq) {
-    service.remove(seq);
+  
+  @DeleteMapping(path = "/{seq}/companies/{companySeq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq, @PathVariable("companySeq") Long companySeq) {
+    service.remove(seq, companySeq);
 
     return ResponseEntity.noContent().build();
   }

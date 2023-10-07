@@ -19,4 +19,6 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
 
   Page<RecruitmentNoticeResponse> findAllAvailable(Pageable pageable);
 
+  Optional<RecruitmentNotice> findBySeqAndCompanySeq(Long seq, Long companySeq);
+
 }
