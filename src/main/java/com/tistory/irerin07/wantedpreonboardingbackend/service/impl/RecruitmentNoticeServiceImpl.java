@@ -1,10 +1,13 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
+import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.RecruitmentNoticeResponse;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoticeVo;
 import com.tistory.irerin07.wantedpreonboardingbackend.repository.RecruitmentNoticeRepository;
 import com.tistory.irerin07.wantedpreonboardingbackend.service.CompanyService;
@@ -28,6 +31,12 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
   @Override
   public void set(RecruitmentNoticeVo.Create create) {
     repository.save(create.toEntity(companyService.get(create.getCompanySeq())));
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public Page<RecruitmentNoticeResponse> get(Pageable pageable) {
+    return repository.findAllAvailable(pageable);
   }
 
   @Transactional
