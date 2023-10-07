@@ -44,8 +44,7 @@ public class RecruitmentNoticeController {
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
-
-  // TODO 응답 데이터에서 채용 내용 빼야함
+  
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read() {
     List<RecruitmentNoticeVo.Response> responses = service.get().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
