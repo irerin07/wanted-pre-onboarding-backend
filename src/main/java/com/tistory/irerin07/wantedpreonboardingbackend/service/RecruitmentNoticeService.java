@@ -15,6 +15,6 @@ public interface RecruitmentNoticeService {
 
   List<RecruitmentNoticeResponse> get();
 
-  RecruitmentNoticeResponse get(Long seq);
+  RecruitmentNoticeVo.DetailResponse get(Long seq);
 
 }

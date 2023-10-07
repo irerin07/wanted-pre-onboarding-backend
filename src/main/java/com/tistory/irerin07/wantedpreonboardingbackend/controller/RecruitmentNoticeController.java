@@ -38,13 +38,15 @@ public class RecruitmentNoticeController {
 
   private final RecruitmentNoticeService service;
 
+  //채용 공고 등록
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> create(@Validated @RequestBody RecruitmentNoticeVo.Create create) {
     service.set(create);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
-  
+
+  // 채용 공고 조회
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read() {
     List<RecruitmentNoticeVo.Response> responses = service.get().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
@@ -52,11 +54,13 @@ public class RecruitmentNoticeController {
     return ResponseEntity.ok(new ResourcesWrapper.Builder(responses).build());
   }
 
+  // 채용 상세 페이지 조회
   @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(RecruitmentNoticeVo.DetailResponse.toVo(service.get(seq))).build());
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(seq)).build());
   }
 
+  // 채용 공고 수정
   @PutMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> update(@PathVariable("seq") Long seq, @Validated @RequestBody RecruitmentNoticeVo.Update update) {
     service.modify(update, seq);
@@ -64,6 +68,7 @@ public class RecruitmentNoticeController {
     return ResponseEntity.noContent().build();
   }
 
+  // 채용 공고 삭제
   @DeleteMapping(path = "/{seq}/companies/{companySeq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> delete(@PathVariable("seq") Long seq, @PathVariable("companySeq") Long companySeq) {
     service.remove(seq, companySeq);

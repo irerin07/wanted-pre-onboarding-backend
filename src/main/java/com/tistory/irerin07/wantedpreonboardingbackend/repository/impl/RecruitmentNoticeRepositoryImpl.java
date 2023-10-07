@@ -68,6 +68,14 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     return Optional.ofNullable(query.fetchOne());
   }
 
+  @Override
+  public List<RecruitmentNoticeResponse> findAllByCompanySeq(Long companySeq) {
+    JPQLQuery<RecruitmentNotice> query = findAll(recruitmentNotice.company.seq.eq(companySeq), recruitmentNotice.deleteAt.isNull()).orderBy(recruitmentNotice.seq.desc());
+
+
+    return query.transform(groupBy(recruitmentNotice).list(getExpression()));
+  }
+
   private JPQLQuery<RecruitmentNotice> findOne(Predicate... where) {
     //@formatter:off
     return from(recruitmentNotice)

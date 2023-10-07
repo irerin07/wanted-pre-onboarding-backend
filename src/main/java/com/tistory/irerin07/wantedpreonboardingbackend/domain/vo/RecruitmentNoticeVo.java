@@ -1,6 +1,7 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.domain.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -141,20 +142,31 @@ public class RecruitmentNoticeVo implements Serializable {
 
     private CompanyVo.Response company;
 
+    private List<Long> recruitmentNoticeSeqs;
+
     @Builder
-    public DetailResponse(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company) {
+    public DetailResponse(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company, List<Long> recruitmentNoticeSeqs) {
       this.seq = seq;
       this.jobPosition = jobPosition;
       this.requiredSkill = requiredSkill;
       this.recruitReward = recruitReward;
       this.recruitDescription = recruitDescription;
       this.company = company;
+      this.recruitmentNoticeSeqs = recruitmentNoticeSeqs;
     }
 
-    public static DetailResponse toVo(RecruitmentNoticeResponse recruitmentNoticeResponse) {
-      return DetailResponse.builder().seq(recruitmentNoticeResponse.getSeq()).jobPosition(recruitmentNoticeResponse.getJobPosition()).requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
-        .recruitReward(recruitmentNoticeResponse.getRecruitReward()).recruitDescription(recruitmentNoticeResponse.getRecruitDescription()).company(buildCompany(recruitmentNoticeResponse.getCompany()))
+    public static DetailResponse toVo(RecruitmentNoticeResponse recruitmentNoticeResponse, List<Long> recruitmentNoticeSeqs) {
+      //@formatter:off
+      return DetailResponse.builder()
+        .seq(recruitmentNoticeResponse.getSeq())
+        .jobPosition(recruitmentNoticeResponse.getJobPosition())
+        .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward())
+        .recruitDescription(recruitmentNoticeResponse.getRecruitDescription())
+        .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+        .recruitmentNoticeSeqs(recruitmentNoticeSeqs)
         .build();
+      //@formatter:on
     }
 
     static CompanyVo.Response buildCompany(CompanyResponse dto) {

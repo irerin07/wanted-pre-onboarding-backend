@@ -19,4 +19,5 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
 
   Optional<RecruitmentNotice> findBySeqAndCompanySeq(Long seq, Long companySeq);
 
+  List<RecruitmentNoticeResponse>  findAllByCompanySeq(Long companySeq);
 }
