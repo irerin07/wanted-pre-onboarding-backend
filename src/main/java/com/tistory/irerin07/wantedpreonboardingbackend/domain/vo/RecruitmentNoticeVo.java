@@ -62,7 +62,7 @@ public class RecruitmentNoticeVo implements Serializable {
     private String requiredSkill;
 
     public RecruitmentNotice toEntity(Company company) {
-      // formatter:off
+      //@formatter:off
       return RecruitmentNotice.builder()
         .company(company)
         .recruitDescription(this.recruitDescription)
@@ -70,8 +70,34 @@ public class RecruitmentNoticeVo implements Serializable {
         .jobPosition(this.jobPosition)
         .requiredSkill(this.requiredSkill)
         .build();
-      // formatter:on
+      //@formatter:on
     }
+  }
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @SuppressWarnings("java:S5843")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  public static class Update {
+
+    @NotNull(message = "회사 id를 입력해 주세요")
+    private Long companySeq;
+
+    @NotBlank(message = "반드시 값이 존재하고 공백 문자를 제외한 길이가 0보다 커야 합니다.")
+    private String jobPosition;
+
+    @Min(value = 1, message = "채용 포상금은 0원 이상으로 입력해 주세요.")
+    @NotNull(message = "채용 포상금을 입력해 주세요.")
+    private Integer recruitReward;
+
+    @NotBlank(message = "반드시 값이 존재하고 공백 문자를 제외한 길이가 0보다 커야 합니다.")
+    private String recruitDescription;
+
+    @NotBlank(message = "반드시 값이 존재하고 공백 문자를 제외한 길이가 0보다 커야 합니다.")
+    private String requiredSkill;
+
+    private Long seq;
   }
 
 }

@@ -23,8 +23,16 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Transactional(readOnly = true)
   @Override
-  public Company get(Long companySeq) {
-    return repository.findById(companySeq).orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 회사 id입니다."));
+  public Company get(Long seq) {
+    return repository.findById(seq).orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 회사 id입니다."));
+  }
+
+  @Transactional
+  @Override
+  public void validateCompany(Long seq) {
+    if (!repository.existsById(seq)) {
+      throw new ResourceNotFoundException("존재하지 않는 회사 id입니다.");
+    }
   }
 
 }

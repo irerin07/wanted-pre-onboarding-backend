@@ -10,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -83,4 +82,16 @@ public class RecruitmentNotice extends AbstractEntity {
     this.company = company;
   }
 
+  public RecruitmentNotice modify(String recruitDescription, Integer recruitReward, String jobPosition, String requiredSkill) {
+    this.recruitDescription = recruitDescription;
+    this.recruitReward = recruitReward;
+    this.jobPosition = jobPosition;
+    this.requiredSkill = requiredSkill;
+
+    return this;
+  }
+
+  public void remove() {
+    this.deleteAt = LocalDateTime.now();
+  }
 }

@@ -63,7 +63,7 @@ public class QueryDslRepositoryPaginationSupport extends QuerydslRepositorySuppo
   }
 
   protected int saveAllNativeQuery(@NonNull String tableName, @NonNull List<String> columnNames, @NonNull List<List<Object>> values) {
-    // @formatter:off
+    //@formatter:off
     String marker = columnNames.stream().map(v -> "?").collect(Collectors.joining(", "));
 
     Query nativeQuery = getEntityManager().createNativeQuery("INSERT INTO "
@@ -74,7 +74,7 @@ public class QueryDslRepositoryPaginationSupport extends QuerydslRepositorySuppo
     for (int i = 0; i < flatValues.size(); i++) {
       nativeQuery.setParameter(i + 1, flatValues.get(i));
     }
-    // @formatter:on
+    //@formatter:on
 
     return nativeQuery.executeUpdate();
   }

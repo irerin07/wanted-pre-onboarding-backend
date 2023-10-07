@@ -5,4 +5,7 @@ import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoti
 public interface RecruitmentNoticeService {
   void set(RecruitmentNoticeVo.Create create);
 
+  void modify(RecruitmentNoticeVo.Update update, Long seq);
+
+  void remove(Long seq);
 }
