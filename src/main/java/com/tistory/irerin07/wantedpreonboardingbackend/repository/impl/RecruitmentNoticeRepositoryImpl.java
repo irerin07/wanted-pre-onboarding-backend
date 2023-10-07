@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import com.querydsl.core.types.FactoryExpression;
@@ -16,8 +15,6 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tistory.irerin07.wantedpreonboardingbackend.common.configuration.jpa.querydsl.support.QueryDslRepositoryPaginationSupport;
-import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.QCompany;
-import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.QRecruitmentNotice;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.QCompanyResponse;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.QRecruitmentNoticeResponse;
@@ -52,20 +49,13 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   }
 
   @Override
-  public Page<RecruitmentNoticeResponse> findAllAvailable(Pageable pageable) {
-    JPQLQuery<Long> query = findAll(recruitmentNotice.deleteAt.isNull())
-      .select(recruitmentNotice.seq);
-
-    Page<Long> page = buildIdsPage(pageable, query);
-
-    return new PageImpl<>(
-      findAll(recruitmentNotice.seq.in(page.getContent()))
-        .innerJoin(recruitmentNotice.company, company)
-        .orderBy(recruitmentNotice.seq.desc())
-        .transform(groupBy(recruitmentNotice).list(getExpression())),
-      page.getPageable(),
-      page.getTotalElements()
-    );
+  public List<RecruitmentNoticeResponse> findAllAvailable() {
+    //@formatter:off
+    JPQLQuery<RecruitmentNotice> query = findAll(recruitmentNotice.deleteAt.isNull())
+      .innerJoin(recruitmentNotice.company, company)
+      .orderBy(recruitmentNotice.seq.desc());
+    //@formatter:on
+    return query.transform(groupBy(recruitmentNotice).list(getExpression()));
   }
 
   @Override
@@ -78,14 +68,14 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     return Optional.ofNullable(query.fetchOne());
   }
 
-  private JPQLQuery<RecruitmentNotice> findOne(Predicate ...where) {
+  private JPQLQuery<RecruitmentNotice> findOne(Predicate... where) {
     //@formatter:off
     return from(recruitmentNotice)
       .where(where);
     //@formatter:on
   }
 
-  private JPQLQuery<RecruitmentNotice> findAll(Predicate ...where) {
+  private JPQLQuery<RecruitmentNotice> findAll(Predicate... where) {
     //@formatter:off
     return from(recruitmentNotice)
       .where(where);

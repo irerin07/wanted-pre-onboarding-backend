@@ -1,9 +1,7 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.service.impl;
 
-import java.util.Optional;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +35,8 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional(readOnly = true)
   @Override
-  public Page<RecruitmentNoticeResponse> get(Pageable pageable) {
-    return repository.findAllAvailable(pageable);
+  public List<RecruitmentNoticeResponse> get() {
+    return repository.findAllAvailable();
   }
 
   @Transactional(readOnly = true)

@@ -93,6 +93,7 @@ public class RecruitmentNoticeVo implements Serializable {
     private Long seq;
   }
 
+
   @Getter
   @Setter
   @NoArgsConstructor
@@ -103,12 +104,45 @@ public class RecruitmentNoticeVo implements Serializable {
     private String jobPosition;
     private String requiredSkill;
     private Integer recruitReward;
+
+    private CompanyVo.Response company;
+
+    @Builder
+    public Response(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, CompanyVo.Response company) {
+      this.seq = seq;
+      this.jobPosition = jobPosition;
+      this.requiredSkill = requiredSkill;
+      this.recruitReward = recruitReward;
+      this.company = company;
+    }
+
+    public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse) {
+      return Response.builder().seq(recruitmentNoticeResponse.getSeq()).jobPosition(recruitmentNoticeResponse.getJobPosition()).requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward()).company(buildCompany(recruitmentNoticeResponse.getCompany())).build();
+    }
+
+    static CompanyVo.Response buildCompany(CompanyResponse dto) {
+      return null == dto ? null : CompanyVo.Response.toVo(dto);
+    }
+  }
+
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT, content = JsonInclude.Include.NON_EMPTY)
+  public static class DetailResponse {
+    private Long seq;
+    private String jobPosition;
+    private String requiredSkill;
+    private Integer recruitReward;
     private String recruitDescription;
 
     private CompanyVo.Response company;
 
     @Builder
-    public Response(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company) {
+    public DetailResponse(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company) {
       this.seq = seq;
       this.jobPosition = jobPosition;
       this.requiredSkill = requiredSkill;
@@ -117,14 +151,9 @@ public class RecruitmentNoticeVo implements Serializable {
       this.company = company;
     }
 
-    public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse){
-      return Response.builder()
-        .seq(recruitmentNoticeResponse.getSeq())
-        .jobPosition(recruitmentNoticeResponse.getJobPosition())
-        .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
-        .recruitReward(recruitmentNoticeResponse.getRecruitReward())
-        .recruitDescription(recruitmentNoticeResponse.getRecruitDescription())
-        .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+    public static DetailResponse toVo(RecruitmentNoticeResponse recruitmentNoticeResponse) {
+      return DetailResponse.builder().seq(recruitmentNoticeResponse.getSeq()).jobPosition(recruitmentNoticeResponse.getJobPosition()).requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward()).recruitDescription(recruitmentNoticeResponse.getRecruitDescription()).company(buildCompany(recruitmentNoticeResponse.getCompany()))
         .build();
     }
 
