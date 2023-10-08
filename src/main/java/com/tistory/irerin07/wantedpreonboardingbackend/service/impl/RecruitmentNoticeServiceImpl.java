@@ -43,24 +43,11 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<RecruitmentNoticeResponse> getAll() {
-    return repository.findAllAvailable();
-  }
-
-  @Transactional(readOnly = true)
-  @Override
-  public List<RecruitmentNoticeVo.Response> get(String keyword) {
-    return repository.findByKeyword(keyword).stream().map(e -> RecruitmentNoticeVo.Response.toVo(e)).collect(Collectors.toList());
-  }
-
-  @Transactional(readOnly = true)
-  @Override
   public RecruitmentNoticeVo.DetailResponse getResponse(Long seq) {
     RecruitmentNoticeResponse recruitmentNoticeResponse = repository.findResponseBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
 
     //@formatter:off
-    List<Long> recruitmentNoticeSeqs = repository.findAllByCompanySeq(recruitmentNoticeResponse.getCompany().getSeq())
-      .stream()
+    List<Long> recruitmentNoticeSeqs = repository.findAllByCompanySeq(recruitmentNoticeResponse.getCompany().getSeq()).stream()
       .map(AbstractDto::getSeq)
       .filter(e -> !e.equals(seq))
       .collect(Collectors.toList());
@@ -69,19 +56,42 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
     return RecruitmentNoticeVo.DetailResponse.toVo(recruitmentNoticeResponse, recruitmentNoticeSeqs);
   }
 
+  @Transactional(readOnly = true)
+  @Override
+  public List<RecruitmentNoticeResponse> getAll() {
+    return repository.findAllAvailable();
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public List<RecruitmentNoticeVo.Response> get(String keyword) {
+    //@formatter:off
+    return repository.findByKeyword(keyword).stream()
+      .map(RecruitmentNoticeVo.Response::toVo)
+      .collect(Collectors.toList());
+    //@formatter:on
+  }
+
   @Transactional
   @Override
   public void modify(RecruitmentNoticeVo.Update update, Long seq) {
     companyService.validateCompany(update.getCompanySeq());
 
-    RecruitmentNotice recruitmentNotice = repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용공고를 찾을 수 없습니다."));
-    recruitmentNotice.modify(update.getRecruitDescription(), update.getRecruitReward(), update.getJobPosition(), update.getRequiredSkill());
+    //@formatter:off
+    repository.findBySeq(seq)
+      .orElseThrow(() -> new ResourceNotFoundException("채용공고를 찾을 수 없습니다."))
+      .modify(update.getRecruitDescription(), update.getRecruitReward(), update.getJobPosition(), update.getRequiredSkill());
+    //@formatter:on
   }
 
   @Transactional
   @Override
   public void remove(Long seq) {
-    repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+    //@formatter:off
+    repository.findBySeq(seq)
+      .orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."))
+      .remove();
+    //@formatter:on
   }
 
   @Override

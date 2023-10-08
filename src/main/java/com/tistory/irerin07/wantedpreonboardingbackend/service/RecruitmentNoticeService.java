@@ -12,16 +12,16 @@ public interface RecruitmentNoticeService {
 
   RecruitmentNotice get(Long seq);
 
+  RecruitmentNoticeVo.DetailResponse getResponse(Long seq);
+
   List<RecruitmentNoticeResponse> getAll();
 
-  RecruitmentNoticeVo.DetailResponse getResponse(Long seq);
+  List<RecruitmentNoticeVo.Response> get(String keyword);
 
   void modify(RecruitmentNoticeVo.Update update, Long seq);
 
   void remove(Long seq);
 
   boolean existByRecruitmentNoticeSeq(Long seq);
-
-  List<RecruitmentNoticeVo.Response> get(String keyword);
 
 }

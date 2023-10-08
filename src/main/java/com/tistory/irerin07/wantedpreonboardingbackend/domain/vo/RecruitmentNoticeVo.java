@@ -132,6 +132,7 @@ public class RecruitmentNoticeVo implements Serializable {
     static CompanyVo.Response buildCompany(CompanyResponse dto) {
       return null == dto ? null : CompanyVo.Response.toVo(dto);
     }
+
   }
 
 
@@ -146,9 +147,7 @@ public class RecruitmentNoticeVo implements Serializable {
     private String requiredSkill;
     private Integer recruitReward;
     private String recruitDescription;
-
     private CompanyVo.Response company;
-
     private List<Long> recruitmentNoticeSeqs;
 
     @Builder
@@ -181,6 +180,5 @@ public class RecruitmentNoticeVo implements Serializable {
     }
 
   }
-
 
 }
