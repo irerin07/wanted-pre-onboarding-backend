@@ -75,9 +75,9 @@ public class RecruitmentNoticeController {
   }
 
   // 채용 공고 삭제
-  @DeleteMapping(path = "/{seq}/companies/{companySeq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq, @PathVariable("companySeq") Long companySeq) {
-    service.remove(seq, companySeq);
+  @DeleteMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq) {
+    service.remove(seq);
 
     return ResponseEntity.noContent().build();
   }

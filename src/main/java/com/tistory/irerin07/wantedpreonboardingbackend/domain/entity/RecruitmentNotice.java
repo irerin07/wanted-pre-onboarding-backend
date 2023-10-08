@@ -54,7 +54,6 @@ public class RecruitmentNotice extends AbstractEntity {
   @Column(name = "recruit_description", nullable = false)
   private String recruitDescription;
 
-
   @CreatedDate
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
   @Column(name = "create_at", nullable = false, updatable = false)

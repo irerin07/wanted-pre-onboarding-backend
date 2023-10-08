@@ -37,9 +37,13 @@ public class ApplyHistoryServiceImpl implements ApplyHistoryService {
       throw new InvalidRequestException("이미 지원한 이력이 있는 채용 공고입니다.");
     }
 
-    ApplyHistory applyHistory = create.toEntity(userService.get(create.getUserSeq()), recruitmentNoticeService.get(create.getRecruitmentNoticeSeq()));
-
-    repository.save(applyHistory);
+    //@formatter:off
+    repository.save(create.toEntity(
+      userService.get(create.getUserSeq()),
+      recruitmentNoticeService.get(create.getRecruitmentNoticeSeq())
+      )
+    );
+    //@formatter:on
   }
 
 }

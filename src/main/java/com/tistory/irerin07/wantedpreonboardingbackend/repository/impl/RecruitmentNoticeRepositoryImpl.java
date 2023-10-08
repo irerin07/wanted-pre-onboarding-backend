@@ -44,7 +44,6 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   @Override
   public Optional<RecruitmentNoticeResponse> findResponseBySeq(Long seq) {
     JPQLQuery<RecruitmentNotice> query = this.findOne(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull());
-
     List<RecruitmentNoticeResponse> responses = query.transform(groupBy(recruitmentNotice).list(getExpression()));
 
     return responses.isEmpty() ? Optional.empty() : Optional.of(responses.get(0));
@@ -61,31 +60,22 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   }
 
   @Override
-  public Optional<RecruitmentNotice> findBySeqAndCompanySeq(Long seq, Long companySeq) {
-    //@formatter:off
-    JPQLQuery<RecruitmentNotice> query = findOne(recruitmentNotice.seq.eq(seq),recruitmentNotice.deleteAt.isNull(), company.seq.eq(companySeq))
-      .innerJoin(recruitmentNotice.company, company);
-    //@formatter:on
-
-    return Optional.ofNullable(query.fetchOne());
-  }
-
-  @Override
   public List<RecruitmentNoticeResponse> findAllByCompanySeq(Long companySeq) {
-    JPQLQuery<RecruitmentNotice> query = findAll(recruitmentNotice.company.seq.eq(companySeq), recruitmentNotice.deleteAt.isNull()).orderBy(recruitmentNotice.seq.desc());
-
+    //@formatter:off
+    JPQLQuery<RecruitmentNotice> query = findAll(recruitmentNotice.company.seq.eq(companySeq), recruitmentNotice.deleteAt.isNull())
+      .orderBy(recruitmentNotice.seq.desc());
+    //@formatter:on
 
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
   }
 
   @Override
-  public List<RecruitmentNoticeResponse> findAllBySpecification(Specification<RecruitmentNotice> specification) {
-    return null;
-  }
-
-  @Override
   public boolean existsBySeq(Long seq) {
-    return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull()).select(recruitmentNotice.seq).fetchFirst() != null;
+    //@formatter:off
+    return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull())
+      .select(recruitmentNotice.seq)
+      .fetchFirst() != null;
+    //@formatter:on
   }
 
   @Override
@@ -102,6 +92,7 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
       )
     ).innerJoin(recruitmentNotice.company, company);
     //@formatter:on
+
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
   }
 
