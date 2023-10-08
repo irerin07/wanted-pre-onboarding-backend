@@ -1,6 +1,7 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.domain.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -93,6 +94,7 @@ public class RecruitmentNoticeVo implements Serializable {
     private Long seq;
   }
 
+
   @Getter
   @Setter
   @NoArgsConstructor
@@ -103,29 +105,75 @@ public class RecruitmentNoticeVo implements Serializable {
     private String jobPosition;
     private String requiredSkill;
     private Integer recruitReward;
-    private String recruitDescription;
 
     private CompanyVo.Response company;
 
     @Builder
-    public Response(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company) {
+    public Response(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, CompanyVo.Response company) {
+      this.seq = seq;
+      this.jobPosition = jobPosition;
+      this.requiredSkill = requiredSkill;
+      this.recruitReward = recruitReward;
+      this.company = company;
+    }
+
+    public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse) {
+      //@formatter:off
+      return Response.builder()
+        .seq(recruitmentNoticeResponse.getSeq())
+        .jobPosition(recruitmentNoticeResponse.getJobPosition())
+        .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward())
+        .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+        .build();
+      //@formatter:on
+    }
+
+    static CompanyVo.Response buildCompany(CompanyResponse dto) {
+      return null == dto ? null : CompanyVo.Response.toVo(dto);
+    }
+  }
+
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT, content = JsonInclude.Include.NON_EMPTY)
+  public static class DetailResponse {
+    private Long seq;
+    private String jobPosition;
+    private String requiredSkill;
+    private Integer recruitReward;
+    private String recruitDescription;
+
+    private CompanyVo.Response company;
+
+    private List<Long> recruitmentNoticeSeqs;
+
+    @Builder
+    public DetailResponse(Long seq, String jobPosition, String requiredSkill, Integer recruitReward, String recruitDescription, CompanyVo.Response company, List<Long> recruitmentNoticeSeqs) {
       this.seq = seq;
       this.jobPosition = jobPosition;
       this.requiredSkill = requiredSkill;
       this.recruitReward = recruitReward;
       this.recruitDescription = recruitDescription;
       this.company = company;
+      this.recruitmentNoticeSeqs = recruitmentNoticeSeqs;
     }
 
-    public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse){
-      return Response.builder()
+    public static DetailResponse toVo(RecruitmentNoticeResponse recruitmentNoticeResponse, List<Long> recruitmentNoticeSeqs) {
+      //@formatter:off
+      return DetailResponse.builder()
         .seq(recruitmentNoticeResponse.getSeq())
         .jobPosition(recruitmentNoticeResponse.getJobPosition())
         .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
         .recruitReward(recruitmentNoticeResponse.getRecruitReward())
         .recruitDescription(recruitmentNoticeResponse.getRecruitDescription())
         .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+        .recruitmentNoticeSeqs(recruitmentNoticeSeqs)
         .build();
+      //@formatter:on
     }
 
     static CompanyVo.Response buildCompany(CompanyResponse dto) {

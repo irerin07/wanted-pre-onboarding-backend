@@ -1,13 +1,13 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.service.impl;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tistory.irerin07.wantedpreonboardingbackend.domain.dto.AbstractDto;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.RecruitmentNoticeResponse;
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoticeVo;
@@ -37,14 +37,36 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional(readOnly = true)
   @Override
-  public Page<RecruitmentNoticeResponse> get(Pageable pageable) {
-    return repository.findAllAvailable(pageable);
+  public RecruitmentNotice get(Long seq) {
+    return repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
   }
 
   @Transactional(readOnly = true)
   @Override
-  public RecruitmentNoticeResponse get(Long seq) {
-    return repository.findResponseBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
+  public List<RecruitmentNoticeResponse> getAll() {
+    return repository.findAllAvailable();
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public List<RecruitmentNoticeVo.Response> get(String keyword) {
+    return repository.findByKeyword(keyword).stream().map(e -> RecruitmentNoticeVo.Response.toVo(e)).collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public RecruitmentNoticeVo.DetailResponse getResponse(Long seq) {
+    RecruitmentNoticeResponse recruitmentNoticeResponse = repository.findResponseBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다."));
+
+    //@formatter:off
+    List<Long> recruitmentNoticeSeqs = repository.findAllByCompanySeq(recruitmentNoticeResponse.getCompany().getSeq())
+      .stream()
+      .map(AbstractDto::getSeq)
+      .filter(e -> !e.equals(seq))
+      .collect(Collectors.toList());
+    //@formatter:on
+
+    return RecruitmentNoticeVo.DetailResponse.toVo(recruitmentNoticeResponse, recruitmentNoticeSeqs);
   }
 
   @Transactional
@@ -52,17 +74,19 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
   public void modify(RecruitmentNoticeVo.Update update, Long seq) {
     companyService.validateCompany(update.getCompanySeq());
 
-    // TODO 채용공고 조회시 조건에 회사 id도 함께 걸어서 조회 하도록 수정
     RecruitmentNotice recruitmentNotice = repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용공고를 찾을 수 없습니다."));
     recruitmentNotice.modify(update.getRecruitDescription(), update.getRecruitReward(), update.getJobPosition(), update.getRequiredSkill());
   }
 
-  // TODO 회사 id도 함께 받도록 수정
   @Transactional
   @Override
-  public void remove(Long seq) {
-    // TODO 채용공고 조회시 조건에 회사 id도 함께 걸어서 조회 하도록 수정
-    repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+  public void remove(Long seq, Long companySeq) {
+    repository.findBySeqAndCompanySeq(seq, companySeq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+  }
+
+  @Override
+  public boolean existByRecruitmentNoticeSeq(Long seq) {
+    return repository.existsBySeq(seq);
   }
 
 }

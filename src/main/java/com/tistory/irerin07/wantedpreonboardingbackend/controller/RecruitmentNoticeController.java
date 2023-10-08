@@ -1,11 +1,8 @@
 package com.tistory.irerin07.wantedpreonboardingbackend.controller;
 
-import static com.tistory.irerin07.wantedpreonboardingbackend.common.constant.PageConstant.PAGE_BLOCK;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.autoconfigure.web.domain.ResourcesWrapper;
@@ -41,6 +39,7 @@ public class RecruitmentNoticeController {
 
   private final RecruitmentNoticeService service;
 
+  //채용 공고 등록
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> create(@Validated @RequestBody RecruitmentNoticeVo.Create create) {
     service.set(create);
@@ -48,17 +47,26 @@ public class RecruitmentNoticeController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  // TODO 응답 데이터에서 채용 내용 빼야함
+  // 채용 공고 조회
   @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ResourcesWrapper> read(@PageableDefault Pageable pageable) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(pageable), PAGE_BLOCK).build());
+  public ResponseEntity<ResourcesWrapper> read() {
+    List<RecruitmentNoticeVo.Response> responses = service.getAll().stream().map(RecruitmentNoticeVo.Response::toVo).collect(Collectors.toList());
+
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(responses).build());
   }
 
+  // 채용 상세 페이지 조회
   @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
-    return ResponseEntity.ok(new ResourcesWrapper.Builder(RecruitmentNoticeVo.Response.toVo(service.get(seq))).build());
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.getResponse(seq)).build());
   }
 
+  @GetMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResourcesWrapper> search(@RequestParam String keyword) {
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(keyword)).build());
+  }
+
+  // 채용 공고 수정
   @PutMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> update(@PathVariable("seq") Long seq, @Validated @RequestBody RecruitmentNoticeVo.Update update) {
     service.modify(update, seq);
@@ -66,10 +74,10 @@ public class RecruitmentNoticeController {
     return ResponseEntity.noContent().build();
   }
 
-  // TODO 삭제 요청시 회사 id도 함께 전달받도록 수정
-  @DeleteMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq) {
-    service.remove(seq);
+  // 채용 공고 삭제
+  @DeleteMapping(path = "/{seq}/companies/{companySeq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> delete(@PathVariable("seq") Long seq, @PathVariable("companySeq") Long companySeq) {
+    service.remove(seq, companySeq);
 
     return ResponseEntity.noContent().build();
   }

@@ -3,8 +3,7 @@ package com.tistory.irerin07.wantedpreonboardingbackend.repository.querydsl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
@@ -17,6 +16,15 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
 
   Optional<RecruitmentNoticeResponse> findResponseBySeq(Long seq);
 
-  Page<RecruitmentNoticeResponse> findAllAvailable(Pageable pageable);
+  List<RecruitmentNoticeResponse> findAllAvailable();
 
+  Optional<RecruitmentNotice> findBySeqAndCompanySeq(Long seq, Long companySeq);
+
+  List<RecruitmentNoticeResponse> findAllByCompanySeq(Long companySeq);
+
+  List<RecruitmentNoticeResponse> findAllBySpecification(Specification<RecruitmentNotice> specification);
+
+  boolean existsBySeq(Long seq);
+
+  List<RecruitmentNoticeResponse> findByKeyword(String keyword);
 }
