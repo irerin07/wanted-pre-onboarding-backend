@@ -80,8 +80,8 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional
   @Override
-  public void remove(Long seq, Long companySeq) {
-    repository.findBySeqAndCompanySeq(seq, companySeq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
+  public void remove(Long seq) {
+    repository.findBySeq(seq).orElseThrow(() -> new ResourceNotFoundException("채용 공고를 찾을 수 없습니다.")).remove();
   }
 
   @Override

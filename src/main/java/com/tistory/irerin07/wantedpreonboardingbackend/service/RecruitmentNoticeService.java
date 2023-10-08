@@ -18,7 +18,7 @@ public interface RecruitmentNoticeService {
 
   void modify(RecruitmentNoticeVo.Update update, Long seq);
 
-  void remove(Long seq, Long companySeq);
+  void remove(Long seq);
 
   boolean existByRecruitmentNoticeSeq(Long seq);
 
