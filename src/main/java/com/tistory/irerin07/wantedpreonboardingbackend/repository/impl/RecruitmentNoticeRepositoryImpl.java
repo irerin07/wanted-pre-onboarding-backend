@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.querydsl.core.types.FactoryExpression;
 import com.querydsl.core.types.Predicate;
@@ -74,6 +75,11 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
 
 
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
+  }
+
+  @Override
+  public List<RecruitmentNoticeResponse> findAllBySpecification(Specification<RecruitmentNotice> specification) {
+    return null;
   }
 
   @Override

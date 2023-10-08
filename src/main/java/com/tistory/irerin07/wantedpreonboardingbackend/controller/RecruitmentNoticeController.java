@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.autoconfigure.web.domain.ResourcesWrapper;
@@ -58,6 +59,11 @@ public class RecruitmentNoticeController {
   @GetMapping(path = "/{seq}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResourcesWrapper> read(@PathVariable("seq") Long seq) {
     return ResponseEntity.ok(new ResourcesWrapper.Builder(service.getResponse(seq)).build());
+  }
+
+  @GetMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResourcesWrapper> search(@RequestParam String keyword) {
+    return ResponseEntity.ok(new ResourcesWrapper.Builder(service.get(keyword)).build());
   }
 
   // 채용 공고 수정

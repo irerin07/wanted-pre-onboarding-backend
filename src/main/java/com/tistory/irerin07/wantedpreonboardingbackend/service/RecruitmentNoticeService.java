@@ -22,4 +22,6 @@ public interface RecruitmentNoticeService {
 
   boolean existByRecruitmentNoticeSeq(Long seq);
 
+  List<RecruitmentNoticeResponse> get(String keyword);
+
 }

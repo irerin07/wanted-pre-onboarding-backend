@@ -3,6 +3,7 @@ package com.tistory.irerin07.wantedpreonboardingbackend.repository.querydsl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.entity.RecruitmentNotice;
@@ -21,6 +22,7 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
 
   List<RecruitmentNoticeResponse> findAllByCompanySeq(Long companySeq);
 
-  boolean existsBySeq(Long seq);
+  List<RecruitmentNoticeResponse> findAllBySpecification(Specification<RecruitmentNotice> specification);
 
+  boolean existsBySeq(Long seq);
 }
