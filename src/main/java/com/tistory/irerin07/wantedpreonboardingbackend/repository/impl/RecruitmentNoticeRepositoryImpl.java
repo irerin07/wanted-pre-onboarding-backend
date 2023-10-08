@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.querydsl.core.types.FactoryExpression;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tistory.irerin07.wantedpreonboardingbackend.common.configuration.jpa.querydsl.support.QueryDslRepositoryPaginationSupport;
@@ -85,6 +86,31 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
   @Override
   public boolean existsBySeq(Long seq) {
     return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull()).select(recruitmentNotice.seq).fetchFirst() != null;
+  }
+
+  @Override
+  public List<RecruitmentNoticeResponse> findByKeyword(String keyword) {
+    //@formatter:off
+    JPQLQuery<RecruitmentNotice> query = findAll(recruitmentNotice.deleteAt.isNull().and(
+      recruitmentNotice.jobPosition.contains(keyword)
+        .or(recruitRewardEquals(keyword))
+        .or(recruitmentNotice.recruitDescription.contains(keyword))
+        .or(recruitmentNotice.requiredSkill.contains(keyword))
+        .or(company.companyName.contains(keyword))
+        .or(company.country.contains(keyword))
+        .or(company.region.contains(keyword))
+      )
+    ).innerJoin(recruitmentNotice.company, company);
+    //@formatter:on
+    return query.transform(groupBy(recruitmentNotice).list(getExpression()));
+  }
+
+  private BooleanExpression recruitRewardEquals(String key) {
+    try {
+      return recruitmentNotice.recruitReward.eq(Integer.valueOf(key));
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   private JPQLQuery<RecruitmentNotice> findOne(Predicate... where) {

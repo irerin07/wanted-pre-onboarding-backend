@@ -118,8 +118,15 @@ public class RecruitmentNoticeVo implements Serializable {
     }
 
     public static Response toVo(RecruitmentNoticeResponse recruitmentNoticeResponse) {
-      return Response.builder().seq(recruitmentNoticeResponse.getSeq()).jobPosition(recruitmentNoticeResponse.getJobPosition()).requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
-        .recruitReward(recruitmentNoticeResponse.getRecruitReward()).company(buildCompany(recruitmentNoticeResponse.getCompany())).build();
+      //@formatter:off
+      return Response.builder()
+        .seq(recruitmentNoticeResponse.getSeq())
+        .jobPosition(recruitmentNoticeResponse.getJobPosition())
+        .requiredSkill(recruitmentNoticeResponse.getRequiredSkill())
+        .recruitReward(recruitmentNoticeResponse.getRecruitReward())
+        .company(buildCompany(recruitmentNoticeResponse.getCompany()))
+        .build();
+      //@formatter:on
     }
 
     static CompanyVo.Response buildCompany(CompanyResponse dto) {

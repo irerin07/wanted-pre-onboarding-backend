@@ -25,4 +25,6 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
   List<RecruitmentNoticeResponse> findAllBySpecification(Specification<RecruitmentNotice> specification);
 
   boolean existsBySeq(Long seq);
+
+  List<RecruitmentNoticeResponse> findByKeyword(String keyword);
 }
