@@ -56,6 +56,7 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
       .innerJoin(recruitmentNotice.company, company)
       .orderBy(recruitmentNotice.seq.desc());
     //@formatter:on
+
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
   }
 
@@ -67,15 +68,6 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     //@formatter:on
 
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
-  }
-
-  @Override
-  public boolean existsBySeq(Long seq) {
-    //@formatter:off
-    return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull())
-      .select(recruitmentNotice.seq)
-      .fetchFirst() != null;
-    //@formatter:on
   }
 
   @Override
@@ -94,6 +86,15 @@ public class RecruitmentNoticeRepositoryImpl extends QueryDslRepositoryPaginatio
     //@formatter:on
 
     return query.transform(groupBy(recruitmentNotice).list(getExpression()));
+  }
+
+  @Override
+  public boolean existsBySeq(Long seq) {
+    //@formatter:off
+    return findAll(recruitmentNotice.seq.eq(seq), recruitmentNotice.deleteAt.isNull())
+      .select(recruitmentNotice.seq)
+      .fetchFirst() != null;
+    //@formatter:on
   }
 
   private BooleanExpression recruitRewardEquals(String key) {

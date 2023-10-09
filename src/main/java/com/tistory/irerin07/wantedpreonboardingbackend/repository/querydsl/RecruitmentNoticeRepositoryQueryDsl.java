@@ -19,8 +19,8 @@ public interface RecruitmentNoticeRepositoryQueryDsl {
 
   List<RecruitmentNoticeResponse> findAllByCompanySeq(Long companySeq);
 
-  boolean existsBySeq(Long seq);
-
   List<RecruitmentNoticeResponse> findByKeyword(String keyword);
+
+  boolean existsBySeq(Long seq);
 
 }
