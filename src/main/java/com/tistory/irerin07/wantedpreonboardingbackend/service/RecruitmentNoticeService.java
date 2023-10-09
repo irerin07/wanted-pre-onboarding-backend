@@ -8,7 +8,7 @@ import com.tistory.irerin07.wantedpreonboardingbackend.domain.vo.RecruitmentNoti
 
 public interface RecruitmentNoticeService {
 
-  void set(RecruitmentNoticeVo.Create create);
+  RecruitmentNotice set(RecruitmentNoticeVo.Create create);
 
   RecruitmentNotice get(Long seq);
 
@@ -18,7 +18,7 @@ public interface RecruitmentNoticeService {
 
   List<RecruitmentNoticeVo.Response> get(String keyword);
 
-  void modify(RecruitmentNoticeVo.Update update, Long seq);
+  RecruitmentNotice modify(RecruitmentNoticeVo.Update update, Long seq);
 
   void remove(Long seq);
 

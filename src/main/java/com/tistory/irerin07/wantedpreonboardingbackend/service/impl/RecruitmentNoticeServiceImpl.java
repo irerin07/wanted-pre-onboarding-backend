@@ -31,8 +31,8 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional
   @Override
-  public void set(RecruitmentNoticeVo.Create create) {
-    repository.save(create.toEntity(companyService.get(create.getCompanySeq())));
+  public RecruitmentNotice set(RecruitmentNoticeVo.Create create) {
+    return repository.save(create.toEntity(companyService.get(create.getCompanySeq())));
   }
 
   @Transactional(readOnly = true)
@@ -74,11 +74,9 @@ public class RecruitmentNoticeServiceImpl implements RecruitmentNoticeService {
 
   @Transactional
   @Override
-  public void modify(RecruitmentNoticeVo.Update update, Long seq) {
-    companyService.validateCompany(update.getCompanySeq());
-
+  public RecruitmentNotice modify(RecruitmentNoticeVo.Update update, Long seq) {
     //@formatter:off
-    repository.findBySeq(seq)
+    return repository.findBySeq(seq)
       .orElseThrow(() -> new ResourceNotFoundException("채용공고를 찾을 수 없습니다."))
       .modify(update.getRecruitDescription(), update.getRecruitReward(), update.getJobPosition(), update.getRequiredSkill());
     //@formatter:on

@@ -15,6 +15,7 @@ import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.CompanyRe
 import com.tistory.irerin07.wantedpreonboardingbackend.domain.response.RecruitmentNoticeResponse;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,8 @@ public class RecruitmentNoticeVo implements Serializable {
 
   @Getter
   @Setter
+  @Builder
+  @AllArgsConstructor
   @NoArgsConstructor
   @SuppressWarnings("java:S5843")
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -70,13 +73,12 @@ public class RecruitmentNoticeVo implements Serializable {
 
   @Getter
   @Setter
+  @Builder
+  @AllArgsConstructor
   @NoArgsConstructor
   @SuppressWarnings("java:S5843")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public static class Update {
-
-    @NotNull(message = "회사 id를 입력해 주세요")
-    private Long companySeq;
 
     @NotBlank(message = "반드시 값이 존재하고 공백 문자를 제외한 길이가 0보다 커야 합니다.")
     private String jobPosition;
