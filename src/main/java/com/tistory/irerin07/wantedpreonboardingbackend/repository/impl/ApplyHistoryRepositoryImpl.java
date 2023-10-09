@@ -33,7 +33,10 @@ public class ApplyHistoryRepositoryImpl extends QueryDslRepositoryPaginationSupp
   }
 
   private JPQLQuery<ApplyHistory> findAll(Predicate... where) {
-    return from(applyHistory).where(where);
+    //@formatter:off
+    return from(applyHistory)
+      .where(where);
+    //@formatter:on
   }
 
 }
