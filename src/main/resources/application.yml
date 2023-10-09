@@ -13,3 +13,4 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
